@@ -17,12 +17,12 @@ admin.site.register(CustomUser)
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id',"user", "like_counts", "category",'short_content']
-    fields = ["user", "category","tags",'content','like_counts']
+    fields = ["user", "category","tags",'en_content','ar_content','like_counts']
     # readonly_fields = ["like_counts"]
     filter_horizontal = ["tags", 'liked_users']
 
     def short_content(self, obj):
-        return obj.content[:30]
+        return obj.en_content
 
 
 @admin.register(Tag)

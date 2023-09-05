@@ -66,7 +66,13 @@ class Post(LikeableModel, models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
-    content = models.TextField()
+    SOURCES = (
+        ("0","Al-Quran"),
+        ("1", "Al-Hadith")
+    )
+    source = models.CharField(max_length=122, null=True, choices=SOURCES)
+    ar_content = models.TextField(null=True, blank=True)
+    en_content = models.TextField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
