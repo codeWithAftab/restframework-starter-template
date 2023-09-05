@@ -67,8 +67,8 @@ class Post(LikeableModel, models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     SOURCES = (
-        ("0","Al-Quran"),
-        ("1", "Al-Hadith")
+        (0, "Al-Quran"),
+        (1, "Al-Hadith")
     )
     source = models.CharField(max_length=122, null=True, choices=SOURCES)
     ar_content = models.TextField(null=True, blank=True)

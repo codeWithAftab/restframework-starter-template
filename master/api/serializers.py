@@ -25,11 +25,11 @@ class ReplySerializer(serializers.ModelSerializer):
 class PostsSerializer(serializers.ModelSerializer):
     liked_users = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
+    
 
     class Meta:
         model = Post
-        # fields = "__all__"
-        fields = ['id','user','category','ar_content',"en_content",'like_counts','liked_users','tags','created_on','updated_on']
+        fields = ['id','user','source','category','ar_content',"en_content",'like_counts','liked_users','tags','created_on','updated_on']
 
     def get_liked_users(self, obj):
         show_liked_users = self.context.get('show_liked_users', False)
