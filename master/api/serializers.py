@@ -24,11 +24,12 @@ class ReplySerializer(serializers.ModelSerializer):
 
 class PostsSerializer(serializers.ModelSerializer):
     liked_users = serializers.SerializerMethodField()
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Post
-        fields = "__all__"
-        # fields = ['id','user','category','tags','liked_users','like_counts','content','created_on','updated_on']
+        # fields = "__all__"
+        fields = ['id','user','category','ar_content',"en_content",'like_counts','liked_users','tags','created_on','updated_on']
 
     def get_liked_users(self, obj):
         show_liked_users = self.context.get('show_liked_users', False)
@@ -38,18 +39,16 @@ class PostsSerializer(serializers.ModelSerializer):
         users_serializer = UserSerializer(obj.get_liked_users(), many=True)
         return users_serializer.data
     
-    # def to_representation(self, instance):
-    #     # Get the original representation using the parent class method
-    #     representation = super().to_representation(instance)
+    def to_representation(self, instance):
+        # Get the original representation using the parent class method
+        representation = super().to_representation(instance)
         
-    #     # Check if weeks should be included based on the context
-    #     show_liked_users = self.context.get("show_liked_users", False)
-    #     show_comments = self.context.get("show_comments", False)
-        
-    #     if not show_comments:
-    #         representation.pop("comments", None)
+        # Check if weeks should be included based on the context
+        show_liked_users = self.context.get("show_liked_users", False)
+  
+        if not show_liked_users:
+            representation.pop("liked_users")
 
-    #     if not show_liked_users:
-    #         representation.pop("liked_users", None)
+        return representation
         
 
