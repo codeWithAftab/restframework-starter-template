@@ -73,16 +73,30 @@ class Post(LikeableModel, models.Model):
     source = models.CharField(max_length=122, null=True, choices=SOURCES)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
+    # comment_count = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return f"Post {self.id}"
+    
+    def get_comments(self):
+        return self.comments.all()
+    
+    def do_comment(self, user, content):
+        return Comment.objects.create(user=user, post=self, content=content)
+    
+    def remove_comment(self, user, comment_id):
+        comment = self.comments.get(user=user, id=comment_id, is_removed=False)
+        comment.is_removed = True
+        comment.save()
 
         
 class Comment(LikeableModel, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='comments')
+    is_removed = models.BooleanField(default=False)
+    reply_count = models.PositiveIntegerField(default=0)
     content = models.TextField()
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -90,20 +104,42 @@ class Comment(LikeableModel, models.Model):
     def __str__(self) -> str:
         return f"{self.user} : {self.post}"
     
+    def increase_reply_count(self):
+        self.reply_count += 1
+        self.save()
+
+    def decrease_reply_count(self):
+        self.reply_count -= 1
+        self.save()
+
+    def do_reply(self, user, content):
+        reply =  Reply.objects.create(comment=self, user=user, content=content)
+        self.increase_reply_count()
+        return reply
+     
+    def remove_reply(self, user, reply_id):
+        reply = self.replies.get(user=user, id=reply_id, is_removed=False)
+        self.decrease_reply_count()
+        reply.is_removed = True
+        reply.save()
+    
+    def get_replies(self):
+        return self.replies.all()
 
 class Reply(LikeableModel, models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='replies')
+    is_removed = models.BooleanField(default=False)
     content = models.TextField()
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
-        
+    
     class Meta:
         verbose_name = 'Reply'
         verbose_name_plural = 'Replies'
 
     def __str__(self) -> str:
-        return f"{self.user} : {self.post}"
+        return f"{self.user} : {self.comment}"
 
     
 
