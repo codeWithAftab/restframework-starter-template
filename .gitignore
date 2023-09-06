@@ -1,3 +1,9 @@
 account/migrations
 master/migrations
 db.sqlite3
+mysite/__pycache__
+master/__pycache__
+master/apis/__pycache__
+master/apis/general/__pycache__
+account/__pycache__
+account/api/__pycache__
