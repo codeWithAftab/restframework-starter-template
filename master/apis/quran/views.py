@@ -1,5 +1,6 @@
 from rest_framework.generics import ListAPIView
 from firebase_auth.authentication import FirebaseAuthentication
+from rest_framework.pagination import PageNumberPagination
 from master.models import Chapter
 from .serializers import *
 from rest_framework.response import Response
@@ -55,6 +56,28 @@ class SearchQuran(ListAPIView):
             "data": serializer.data
         }
         return Response(response)
+
+class SearchQuran_v2(ListAPIView):
+    serializer_class = ChapterSearchSerializer_v2   
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        params = self.request.GET
+        chapters = Verse.objects.select_related('chapter','language').filter(Q(content__icontains=params["keyword"]))
+        return chapters
+    
+    def get_serializer_context(self, *args, **kwargs):
+        context = super().get_serializer_context()
+        context["params"] = self.request.GET
+        return context
+    
+    # def get(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(self.get_queryset(), many=True)
+    #     response = {
+    #         "counts": len(self.get_queryset()),
+    #         "data": serializer.data
+    #     }
+    #     return Response(response)
 
 class LanguagesListApi(ListAPIView):
     serializer_class = LanguageSerializer
