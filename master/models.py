@@ -70,7 +70,7 @@ class Post(LikeableModel, models.Model):
         (0, "Al-Quran"),
         (1, "Al-Hadith")
     )
-    source = models.CharField(max_length=122, null=True, choices=SOURCES)
+    source = models.IntegerField(null=True, choices=SOURCES)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
     # comment_count = models.PositiveIntegerField(default=0)
