@@ -13,8 +13,11 @@ def addChapters():
         location = row["LOCATION"]
         verses = row["VERSES"]
         verse_timings = row["VERSE TIMINGS"]
-        chapter = Chapter.objects.create(chapter_id=int(chapter_id), translit_name=translit, en_name=english_title, ar_name=arabic_title, origin=location, verse_count=int(verses))
-        print(chapter)
+        try:
+            chapter = Chapter.objects.create(chapter_id=int(chapter_id), translit_name=translit, en_name=english_title, ar_name=arabic_title, origin=location, verse_count=int(verses))
+            print(chapter)
+        except Exception as e:
+            print(e)
 
 
 
