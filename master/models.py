@@ -141,71 +141,67 @@ class Reply(LikeableModel, models.Model):
     def __str__(self) -> str:
         return f"{self.user} : {self.comment}"
 
+
+# class Narration(models.Model):
+#     narration_id = models.IntegerField(unique=True)
+#     name = models.CharField(max_length=100, null=True, blank= True)
+#     # image = models.ImageField(upload_to=nameFile,null=True, blank=True)
+#     description = models.TextField(null=True, blank=True)
+
+#     def __str__(self):
+#         return self.name
     
+# class Chapter(models.Model):
+#     chapter_id = models.IntegerField(unique=True)
+#     en_name = models.CharField(max_length=122, verbose_name="English Name")
+#     ar_name = models.CharField(max_length=122, verbose_name="Arabic Name")
+#     translit_name = models.CharField(max_length=122, verbose_name="Transliteration")
+#     ORIGIN_CHOICES = (
+#         ("Makka","Makkiyyah"),
+#         ("Medina","Madaniyyah"),
+#     )
+#     origin = models.CharField(max_length=122, choices=ORIGIN_CHOICES)
+#     verse_count = models.IntegerField()
 
-    
-    
+#     class Meta:
+#         verbose_name = "Chapter"
+#         verbose_name_plural = "Chapters"
 
-class Narration(models.Model):
-    narration_id = models.IntegerField(unique=True)
-    name = models.CharField(max_length=100, null=True, blank= True)
-    # image = models.ImageField(upload_to=nameFile,null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+# class QuranJuz(models.Model):
+#     juz_id = models.IntegerField(unique=True)
+#     en_name = models.CharField(max_length=122, null=True, verbose_name="English Name")
+#     ar_name = models.CharField(max_length=122, null=True, verbose_name="Arabic Name")
+#     ur_name = models.CharField(max_length=122, null=True, verbose_name="Arabic Name")
+#     translit_name = models.CharField(max_length=122,null=True, verbose_name="Transliteration")
+#     verse_count = models.IntegerField(null=True,blank=True)
 
-    def __str__(self):
-        return self.name
-    
-class Chapter(models.Model):
-    chapter_id = models.IntegerField(unique=True)
-    en_name = models.CharField(max_length=122, verbose_name="English Name")
-    ar_name = models.CharField(max_length=122, verbose_name="Arabic Name")
-    translit_name = models.CharField(max_length=122, verbose_name="Transliteration")
-    ORIGIN_CHOICES = (
-        ("Makka","Makkiyyah"),
-        ("Medina","Madaniyyah"),
-    )
-    origin = models.CharField(max_length=122, choices=ORIGIN_CHOICES)
-    verse_count = models.IntegerField()
+#     start_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name='juz_start_chapters',null=True,blank=True,default=None)
+#     start_verse_number = models.IntegerField(null=True,blank=True)
 
-    class Meta:
-        verbose_name = "Chapter"
-        verbose_name_plural = "Chapters"
+#     end_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name='juz_end_chapters',null=True,blank=True,default=None)
+#     end_verse_number = models.IntegerField(null=True,blank=True)
 
-class QuranJuz(models.Model):
-    juz_id = models.IntegerField(unique=True)
-    en_name = models.CharField(max_length=122, null=True, verbose_name="English Name")
-    ar_name = models.CharField(max_length=122, null=True, verbose_name="Arabic Name")
-    ur_name = models.CharField(max_length=122, null=True, verbose_name="Arabic Name")
-    translit_name = models.CharField(max_length=122,null=True, verbose_name="Transliteration")
-    verse_count = models.IntegerField(null=True,blank=True)
-
-    start_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name='juz_start_chapters',null=True,blank=True,default=None)
-    start_verse_number = models.IntegerField(null=True,blank=True)
-
-    end_chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name='juz_end_chapters',null=True,blank=True,default=None)
-    end_verse_number = models.IntegerField(null=True,blank=True)
-
-    def __str__(self) -> str:
-        return f"{self.juz_id} : Name : {self.en_name}"
+#     def __str__(self) -> str:
+#         return f"{self.juz_id} : Name : {self.en_name}"
 
 
-class Language(models.Model):
-    language_id = models.IntegerField(unique=True)
-    name = models.CharField(max_length=122)
-    code = models.CharField(max_length=122)
+# class Language(models.Model):
+#     language_id = models.IntegerField(unique=True)
+#     name = models.CharField(max_length=122)
+#     code = models.CharField(max_length=122)
 
 
-class Verse(models.Model):
-    verse_id = models.IntegerField()
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name="verses")
-    narration = models.ForeignKey(Narration, on_delete=models.CASCADE, null=True, blank=True, related_name='narration_style')
-    juz = models.ForeignKey(QuranJuz, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name="verse_data")
-    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="verses")
-    verse_number = models.PositiveIntegerField()
-    content = models.TextField()
+# class Verse(models.Model):
+#     verse_id = models.IntegerField()
+#     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name="verses")
+#     narration = models.ForeignKey(Narration, on_delete=models.CASCADE, null=True, blank=True, related_name='narration_style')
+#     juz = models.ForeignKey(QuranJuz, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name="verse_data")
+#     language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="verses")
+#     verse_number = models.PositiveIntegerField()
+#     content = models.TextField()
 
-    def __str__(self) -> str:
-        return f"Verse {self.chapter.chapter_id} : {self.verse_number}"
+#     def __str__(self) -> str:
+#         return f"Verse {self.chapter.chapter_id} : {self.verse_number}"
     
 # class ChapterAudio(models.Model):
 #     chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name="audio")

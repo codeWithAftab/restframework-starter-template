@@ -44,3 +44,14 @@ class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
         fields = ["language_id", "name", "code"]
+
+class ChapterSearchSerializer(ChapterSerializer):
+    def get_verses(self, obj):
+        params = self.context["params"]
+        if params.get("show_verse", False):
+            language_id = params.get("language_id", 0) 
+            verses = obj.verses.filter(language__language_id=language_id, content__icontains=params["keyword"]).annotate(languageid=F("language__language_id"))
+            verse_serializer = QuranicVerseSerializer(verses, many=True)
+            return verse_serializer.data
+        
+        return None

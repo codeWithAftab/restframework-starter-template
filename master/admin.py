@@ -48,8 +48,8 @@ class ReplyAdmin(admin.ModelAdmin):
     filter_horizontal = ['liked_users']
 
 
-admin.site.register(Chapter)
-admin.site.register(Verse)
-admin.site.register(Language)
-admin.site.register(QuranJuz)
-admin.site.register(Narration)
+# admin.site.register(Chapter)
+# admin.site.register(Verse)
+# admin.site.register(Language)
+# admin.site.register(QuranJuz)
+# admin.site.register(Narration)
