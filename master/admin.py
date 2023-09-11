@@ -1,5 +1,5 @@
 from django.contrib import admin
-from master.models import Category, Tag, Post, Reply, Comment
+from master.models import *
 from account.models import CustomUser
 
 # Register your models here.
@@ -46,3 +46,10 @@ class ReplyAdmin(admin.ModelAdmin):
     fields = [ "user","comment","tags",'content']
     readonly_fields = ["like_counts"]
     filter_horizontal = ['liked_users']
+
+
+admin.site.register(Chapter)
+admin.site.register(Verse)
+admin.site.register(Language)
+admin.site.register(QuranJuz)
+admin.site.register(Narration)

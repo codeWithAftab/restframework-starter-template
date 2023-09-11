@@ -3,4 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include("master.apis.general.urls")),
+    path('quran/', include("master.apis.quran.urls")),
 ]

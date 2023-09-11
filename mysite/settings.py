@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'master',
     'account',
-    'firebase_auth'
+    'firebase_auth',
+    'master.apis.quran'
 ]
 
 MIDDLEWARE = [
