@@ -64,6 +64,10 @@ class SearchQuran_v2(ListAPIView):
     def get_queryset(self):
         params = self.request.GET
         chapters = Verse.objects.select_related('chapter','language').filter(Q(content__icontains=params["keyword"]))
+        chapters = chapters.filter(Q(content__icontains=" {0} ".format(params["keyword"])) |
+                                   Q(content__icontains="{0} ".format(params["keyword"])) |
+                                   Q(content__icontains=" {0}".format(params["keyword"]))
+                                   )
         return chapters
     
     def get_serializer_context(self, *args, **kwargs):
