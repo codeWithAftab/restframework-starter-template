@@ -5,6 +5,7 @@ from master.models import Chapter
 from .serializers import *
 from rest_framework.response import Response
 from django.db.models import Prefetch, Q, F
+import re
 
 
 class QuranChaptersApi(ListAPIView):
@@ -62,12 +63,12 @@ class SearchQuran_v2(ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        params = self.request.GET
-        chapters = Verse.objects.select_related('chapter','language').filter(Q(content__icontains=params["keyword"]))
-        chapters = chapters.filter(Q(content__icontains=" {0} ".format(params["keyword"])) |
-                                   Q(content__icontains="{0} ".format(params["keyword"])) |
-                                   Q(content__icontains=" {0}".format(params["keyword"]))
-                                   )
+        keyword = self._validateSearchText(self.request.GET["keyword"])
+        chapters = Verse.objects.select_related('chapter','language').filter(
+            Q(content__icontains=" {0} ".format(keyword)) |
+            Q(content__icontains=" {0}.".format(keyword)) |
+            Q(content__icontains=" {0},".format(keyword)) 
+            )
         return chapters
     
     def get_serializer_context(self, *args, **kwargs):
@@ -75,13 +76,16 @@ class SearchQuran_v2(ListAPIView):
         context["params"] = self.request.GET
         return context
     
-    # def get(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(self.get_queryset(), many=True)
-    #     response = {
-    #         "counts": len(self.get_queryset()),
-    #         "data": serializer.data
-    #     }
-    #     return Response(response)
+        
+    def _validateSearchText(self, text):
+        text2 = re.sub("[$*&^#@!]","",text) # removing special Character.
+        if text2 == "":
+            return text
+            
+        text2 = re.sub(" +"," ",text2)
+        return text2 # removing extra whitespaces.
+    
+
 
 class LanguagesListApi(ListAPIView):
     serializer_class = LanguageSerializer
