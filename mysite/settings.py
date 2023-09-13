@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'master',
     'account',
     'firebase_auth',
-    'master.apis.quran'
+    'master.apis.quran',
+    'master.apis.sunnah'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,6 @@ AUTH_USER_MODEL = 'account.CustomUser'
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # 'data' is my media folder
+MEDIA_URL = '/media/'

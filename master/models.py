@@ -206,3 +206,80 @@ class Verse(models.Model):
 class ChapterAudio(models.Model):
     chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name="audio")
     file = models.FileField(upload_to="")
+
+
+# hadith models
+
+def upload_hadiths_collection(instance, filename):
+    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
+    return f'hadith/collection/{filename}'
+
+
+# models for hadis features
+class SunnahCollection(models.Model):
+    collection_id = models.IntegerField(unique=True)
+    name = models.CharField(max_length=122, null=True, blank=True)
+    image = models.ImageField(upload_to=upload_hadiths_collection, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    is_available = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+  
+    def __str__(self):
+        return f"{self.name} "
+
+
+class SunnahBook(models.Model):
+    collection = models.ForeignKey(SunnahCollection,on_delete=models.CASCADE,related_name="books")
+    book_id = models.IntegerField(null=True, blank=True)
+    volume_id = models.IntegerField(null=True, blank=True)
+    en_name = models.CharField(max_length=134, null=True, blank=True)
+    ar_name = models.CharField(max_length=134, null=True, blank=True)
+    is_available = models.BooleanField(default=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('collection', 'book_id')
+
+    def __str__(self):
+        return f"{self.book_id}. {self.en_name}"
+
+class SunnahVerse(models.Model):
+    collection = models.ForeignKey(SunnahCollection, on_delete=models.CASCADE, related_name="verses")
+    hadith_id = models.IntegerField(null=True)
+    book = models.ForeignKey(SunnahBook, on_delete=models.CASCADE, related_name="verses")
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="sunnah_verses")
+    number = models.IntegerField(null=True, blank=True)
+    narrated_by = models.CharField(max_length=132)
+    source = models.CharField(max_length=132) 
+    content = models.TextField(blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('book', 'language', 'number')
+
+    def __str__(self):
+        return f"{self.collection} {self.book} "
+
+    def save(self, *args, **kwargs):
+        try:
+            self._change_update_status_of_book()
+        except:
+            pass
+        super(SunnahVerse, self).save(*args, **kwargs)
+    
+    def _change_update_status_of_book(self):
+        self.book.updated_on = self.updated_on
+        self.book.save()
+
+
+# class HadithBookmark(models.Model):
+#     user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE, related_name='hadith_bookmarks')
+#     hadith = models.ForeignKey(HadithData, on_delete=models.CASCADE, related_name='bookmarks')
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     class Meta:
+#         unique_together = ('user', 'hadith')

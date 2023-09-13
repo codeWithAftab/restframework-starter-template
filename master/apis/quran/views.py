@@ -64,8 +64,11 @@ class SearchQuran_v2(ListAPIView):
 
     def get_queryset(self):
         keyword = self._validateSearchText(self.request.GET["keyword"])
+        # regex = r'\b[A-Z]{0}*\b'.format(keyword)
+        # print(regex)
         chapters = Verse.objects.select_related('chapter','language').filter(
             Q(content__icontains=" {0} ".format(keyword)) |
+            # Q(content__regex=r'\b[A-Z]{0}*\b'.format(keyword)) |
             Q(content__icontains=" {0}.".format(keyword)) |
             Q(content__icontains=" {0},".format(keyword)) 
             )

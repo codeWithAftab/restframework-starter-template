@@ -44,3 +44,36 @@ def run_for_quran_data():
     addChapters()
     create_verse_db("aya_text", 0)
     create_verse_db("en_text", 1)
+
+
+def get_hadis(): 
+    import requests
+    import json
+
+    with open("sahih_bukhari.json") as f:
+        file_data = f.read()
+        hadis_book = json.loads(file_data)
+        collection = SunnahCollection.objects.get(collection_id=1)
+        language = Language.objects.get(language_id=1)
+        for volume in hadis_book:
+            volume_name = volume["name"]
+            volume_id = int(volume["name"].replace("Volume",""))
+            print(volume_name)
+            print(volume_id)
+            for book in volume["books"]:
+                book_name = book["name"].split(". ")[-1]
+                book_id = book["name"].split(". ")[0]
+                print(book_name)
+                try:
+                    book_obj = SunnahBook.objects.get(collection=collection, book_id=book_id)
+                except:
+                    book_obj = SunnahBook.objects.create(collection=collection, volume_id=volume_id, book_id=book_id, en_name=book_name)
+                hadith_count = 1
+                for hadith in book["hadiths"]:
+                    hadith_info = hadith["info"]
+                    narrated_by = hadith["by"].replace("Narrated by '","").replace("Narrated by ","")
+                    print(narrated_by)
+                    text = hadith["text"]
+                    # Hadit.objects.create(info=hadith_info,book_name=book_name,narrated_by=narrated_by,text_en=text)
+                    SunnahVerse.objects.create(collection=collection, source=hadith_info, language=language, book=book_obj, narrated_by=narrated_by, content=text, number=hadith_count)
+                    hadith_count+=1
