@@ -56,5 +56,22 @@ class SunnahVerseSearchAPI(ListAPIView):
         params = self.request.GET
         context["params"] = params
         return context
+    
+class SunnahBookSearchAPI(ListAPIView):
+    serializer_class = SunnahBookSerializer
+    
+    def get_queryset(self):
+        collection_id = self.kwargs["collection_id"]
+        keyword = self.request.GET["keyword"]
+        return SunnahBook.objects.select_related('collection').filter(
+                                Q(collection__collection_id=collection_id),
+                                Q(en_name__icontains=keyword)
+                                )
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        params = self.request.GET
+        context["params"] = params
+        return context
 
 
