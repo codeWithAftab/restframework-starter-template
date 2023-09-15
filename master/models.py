@@ -189,6 +189,7 @@ class Language(models.Model):
     language_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=122)
     code = models.CharField(max_length=122)
+    is_available = models.BooleanField(default=True)
 
 
 class Verse(models.Model):

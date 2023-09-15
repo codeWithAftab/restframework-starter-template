@@ -64,11 +64,8 @@ class SearchQuran_v2(ListAPIView):
 
     def get_queryset(self):
         keyword = self._validateSearchText(self.request.GET["keyword"])
-        # regex = r'\b[A-Z]{0}*\b'.format(keyword)
-        # print(regex)
         chapters = Verse.objects.select_related('chapter','language').filter(
             Q(content__icontains=" {0} ".format(keyword)) |
-            # Q(content__regex=r'\b[A-Z]{0}*\b'.format(keyword)) |
             Q(content__icontains=" {0}.".format(keyword)) |
             Q(content__icontains=" {0},".format(keyword)) 
             )
@@ -81,14 +78,15 @@ class SearchQuran_v2(ListAPIView):
     
         
     def _validateSearchText(self, text):
-        text2 = re.sub("[$*&^#@!]","",text) # removing special Character.
+        # removing special Character.
+        text2 = re.sub("[$*&^#@!]","",text) 
         if text2 == "":
             return text
             
         text2 = re.sub(" +"," ",text2)
-        return text2 # removing extra whitespaces.
+        # removing extra whitespaces.
+        return text2 
     
-
 
 class LanguagesListApi(ListAPIView):
     serializer_class = LanguageSerializer
@@ -100,4 +98,5 @@ class LanguagesListApi(ListAPIView):
             "data": serializer.data
         }
         return Response(response)
+
 
