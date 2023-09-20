@@ -43,7 +43,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
-        fields = ["language_id", "name", "code", "is_available"]
+        fields = ["language_id", "name", "code", "is_available", 'created_on', 'updated_on']
 
 class ChapterSearchSerializer(ChapterSerializer):
     def get_verses(self, obj):

@@ -190,7 +190,11 @@ class Language(models.Model):
     name = models.CharField(max_length=122)
     code = models.CharField(max_length=122)
     is_available = models.BooleanField(default=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f"{self.language_id} : Name : {self.name}"
 
 class Verse(models.Model):
     verse_id = models.IntegerField()
