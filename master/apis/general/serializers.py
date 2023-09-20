@@ -58,7 +58,6 @@ class PostsSerializer(serializers.ModelSerializer):
     liked_users = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
     source = serializers.SerializerMethodField()
-    
 
     class Meta:
         model = Post

@@ -58,7 +58,7 @@ class GetCategoryListApi(CustomListAPIView):
 
    
 class GetPostsApi(CustomListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.prefetch_related('tags').all()
     serializer_class = PostsSerializer
 
 
