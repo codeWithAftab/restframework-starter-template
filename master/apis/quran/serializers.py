@@ -2,8 +2,6 @@ from rest_framework import serializers
 from master.models import *
 from django.db.models import F
 
-
-
 class QuranicVerseSerializer(serializers.ModelSerializer):
     verse_key = serializers.SerializerMethodField()
     language_id = serializers.IntegerField(source="language.language_id")

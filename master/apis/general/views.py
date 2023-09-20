@@ -4,7 +4,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, TagSerializer, CategorySerializer
 from master.models import Category, Reply, Comment, Tag, Post
-from rest_framework.pagination import LimitOffsetPagination
+from .pagination import CustomLimitPagination
 from firebase_auth.authentication import FirebaseAuthentication
 import datetime
 from .prayertime import PrayTimes
@@ -57,10 +57,10 @@ class GetCategoryListApi(CustomListAPIView):
     serializer_class = CategorySerializer
 
    
-class GetPostsApi(CustomListAPIView):
+class GetPostsApi(ListAPIView):
     queryset = Post.objects.prefetch_related('tags').all()
     serializer_class = PostsSerializer
-
+    pagination_class = CustomLimitPagination
 
 class LikeUnlikePostApi(APIView):
     authentication_classes = [FirebaseAuthentication]
