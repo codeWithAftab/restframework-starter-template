@@ -1,0 +1,109 @@
+{
+    "categories": [
+      {
+        "name": "Doctrinal and Theological Concepts",
+        "subcategories": [
+          "Monotheism (Tawhid)",
+          "Prophethood (Nubuwwah)",
+          "Resurrection (Qiyamah)",
+          "Divine Attributes"
+        ]
+      },
+      {
+        "name": "Moral and Ethical Values",
+        "subcategories": [
+          "Justice (Adl)",
+          "Mercy (Rahmah)",
+          "Compassion (Rahma)",
+          "Honesty and Truthfulness"
+        ]
+      },
+      {
+        "name": "Worship and Rituals",
+        "subcategories": [
+          "Prayer (Salat)",
+          "Fasting (Sawm)",
+          "Charity (Zakat)",
+          "Pilgrimage (Hajj)"
+        ]
+      },
+      {
+        "name": "Social and Family Issues",
+        "subcategories": [
+          "Family Life",
+          "Marriage and Divorce",
+          "Orphans and Widows",
+          "Social Justice"
+        ]
+      },
+      {
+        "name": "Legal and Juridical Matters",
+        "subcategories": [
+          "Laws of Inheritance (Mirath)",
+          "Criminal Justice",
+          "Contracts and Business Ethics",
+          "Dietary Laws (Halal and Haram)"
+        ]
+      },
+      {
+        "name": "Stories of Prophets and Historical Events",
+        "subcategories": [
+          "Stories of Prophets (e.g., Adam, Noah, Abraham)",
+          "Historical Events (e.g., Exodus of the Israelites)"
+        ]
+      },
+      {
+        "name": "Nature and Creation",
+        "subcategories": [
+          "Signs in the Universe (Ayat in Creation)",
+          "Natural Phenomena",
+          "Environmental Stewardship"
+        ]
+      },
+      {
+        "name": "Guidance for Personal Development",
+        "subcategories": [
+          "Patience and Perseverance (Sabr)",
+          "Repentance (Tawbah)",
+          "Gratitude (Shukr)",
+          "Self-Reflection (Tadabbur)"
+        ]
+      },
+      {
+        "name": "Interfaith and Intercommunity Relations",
+        "subcategories": [
+          "Relations with People of Other Faiths",
+          "Interactions with People of the Book (Ahl al-Kitab)"
+        ]
+      },
+      {
+        "name": "Warnings and Consequences",
+        "subcategories": [
+          "Hellfire and Punishment",
+          "Disbelief (Kufr)",
+          "Hypocrisy (Nifaq)"
+        ]
+      },
+      {
+        "name": "Spiritual and Mystical Insights",
+        "subcategories": [
+          "Sufi Themes",
+          "Mystical Interpretations"
+        ]
+      },
+      {
+        "name": "Guidance for Leadership and Governance",
+        "subcategories": [
+          "Leadership Qualities",
+          "Governance Principles"
+        ]
+      },
+      {
+        "name": "Prophetic Teachings and Hadith",
+        "subcategories": [
+          "Sayings and Traditions of Prophet Muhammad (peace be upon him)"
+        ]
+      }
+    ]
+  }
+  

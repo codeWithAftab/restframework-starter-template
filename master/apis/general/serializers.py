@@ -1,91 +1,48 @@
+from master.models import Verse, SunnahVerse
 from rest_framework import serializers
-from master.models import Post, Comment, Reply, Tag, Category, LikeableModel
-from account.api.serializers import UserSerializer_v2, UserSerializer
+from master.apis.quran.serializers import QuranicVerseSerializer
+from master.apis.sunnah.serializers import SunnahVerseSearchSerializer
+# class SearchQuranAndSunnahSerializer(serializers.Serializer):
+#     # collection = models.ForeignKey(SunnahCollection, on_delete=models.CASCADE, related_name="verses")
+#     hadith_id = serializers.IntegerField(default=None)
+#     book = serializers.IntegerField()
+#     narrated_by =  serializers.CharField(default=None)
+#     source =  serializers.CharField(default=None)
+#     content = serializers.CharField()
+#     verse_type = serializers.CharField()
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = "__all__"
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = "__all__"
+class SearchQuranAndSunnahSerializer(serializers.Serializer):
+    # Define the fields you want to include in the search results
+    # # These fields should match the relevant fields in both models
 
-class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer_v2()
-    liked_users = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = "__all__"
-
-    def get_liked_users(self, obj):
-        show_liked_users = self.context.get('show_liked_users', False)
-        if not show_liked_users:
-            return None
-        
-        users_serializer = UserSerializer_v2(obj.get_liked_users(), many=True)
-        return users_serializer.data
+    collection_id = serializers.IntegerField(default=None, source="collection.collection_id")
+    book_id = serializers.IntegerField(default=None, source="book.book_id")
+    ar_name = serializers.CharField(default=None, source="book.ar_name")
+    en_name = serializers.CharField(default=None, source="book.en_name")
     
+    verse_key = serializers.SerializerMethodField()
+    language_id = serializers.IntegerField(source="language.language_id")
+    verse_type = serializers.CharField()
+    verse_number = serializers.IntegerField(default=None)
+
+    content = serializers.CharField(default=None)
+
+    
+    def get_verse_key(self, obj):
+        if isinstance(obj, Verse):
+            return str(f"{obj.chapter.chapter_id}:{obj.verse_number}")
+        return None
+
     def to_representation(self, instance):
-        # Get the original representation using the parent class method
         representation = super().to_representation(instance)
+        if representation["verse_type"] == "quran":
+            representation.pop('collection_id', None)
+            representation.pop('en_name', None)
+            representation.pop('book_id', None)
+            representation.pop('ar_name', None)
+            return representation
         
-        # Check if weeks should be included based on the context
-        show_liked_users = self.context.get("show_liked_users", False)
-  
-        if not show_liked_users:
-            representation.pop("liked_users")
-
+        representation.pop('verse_number', None)
+        representation.pop('verse_key', None)
         return representation
-        
-
-
-class ReplySerializer(serializers.ModelSerializer):
-    user = UserSerializer_v2()
-    
-    class Meta:
-        model = Reply
-        fields = "__all__"
-
-class LikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LikeableModel
-        field = "__all__"
-
-class PostsSerializer(serializers.ModelSerializer):
-    liked_users = serializers.SerializerMethodField()
-    tags = TagSerializer(many=True)
-    source = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Post
-        fields = ['id','user','source','category','ar_content',"en_content",'like_counts','liked_users','tags','created_on','updated_on']
-
-    def get_source(self, obj):
-        if obj.source == 1:
-            return "Al-Quran"
-        return "Al-Hadith"
-    
-    def get_liked_users(self, obj):
-        show_liked_users = self.context.get('show_liked_users', False)
-        if not show_liked_users:
-            return None
-        
-        users_serializer = UserSerializer(obj.get_liked_users(), many=True)
-        return users_serializer.data
-    
-    def to_representation(self, instance):
-        # Get the original representation using the parent class method
-        representation = super().to_representation(instance)
-        
-        # Check if weeks should be included based on the context
-        show_liked_users = self.context.get("show_liked_users", False)
-  
-        if not show_liked_users:
-            representation.pop("liked_users")
-
-        return representation
-        
-

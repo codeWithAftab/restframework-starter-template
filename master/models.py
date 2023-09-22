@@ -204,6 +204,8 @@ class Verse(models.Model):
     language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="verses")
     verse_number = models.PositiveIntegerField()
     content = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return f"Verse {self.chapter.chapter_id} : {self.verse_number}"

@@ -42,7 +42,7 @@ class SunnahVerseSearchAPI(ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        collection_id = self.kwargs["collection_id"]
+        collection_id = self.kwargs["collection_id"] if self.kwargs.get("collection_id", None) else self.request.GET["collection_id"] 
         keyword = self.request.GET["keyword"]
         return SunnahVerse.objects.select_related('language','book','collection').filter(
                                 Q(collection__collection_id=collection_id),
@@ -73,5 +73,4 @@ class SunnahBookSearchAPI(ListAPIView):
         params = self.request.GET
         context["params"] = params
         return context
-
 

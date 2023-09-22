@@ -60,7 +60,7 @@ class SearchQuran(ListAPIView):
 
 class SearchQuran_v2(ListAPIView):
     serializer_class = ChapterSearchSerializer_v2   
-    pagination_class = PageNumberPagination
+    # pagination_class = PageNumberPagination
 
     def get_queryset(self):
         keyword = self._validateSearchText(self.request.GET["keyword"])
