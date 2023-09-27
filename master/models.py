@@ -2,9 +2,9 @@ from django.db import models
 from account.models import CustomUser
 
 class Category(models.Model):
-    category_id = models.IntegerField(unique=True)
+    # category_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=122)
-    description = models.TextField()
+    description = models.TextField(null=True)
 
     class Meta:
         verbose_name = 'Category'

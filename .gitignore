@@ -5,5 +5,8 @@ mysite/__pycache__
 master/__pycache__
 master/apis/__pycache__
 master/apis/general/__pycache__
+master/apis/posts/__pycache__
+master/apis/quran/__pycache__
+master/apis/sunnah/__pycache__
 account/__pycache__
 account/api/__pycache__
