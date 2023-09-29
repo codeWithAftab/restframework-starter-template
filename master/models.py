@@ -1,17 +1,28 @@
+from collections.abc import Iterable
 from django.db import models
 from account.models import CustomUser
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
 class Category(models.Model):
-    category_id = models.IntegerField(unique=True)
+    # category_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=122)
-    description = models.TextField()
+    embeddings = models.TextField(null=True)
+    description = models.TextField(null=True)
 
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
+    def save(self, *args, **kwargs):
+        if not self.embeddings:
+            self.embeddings = model.encode(self.name)
+
+        return super(Category, self).save(*args, **kwargs)
+
     def __str__(self) -> str:
-        return f"{self.category_id} : {self.name}"
+        return f"{self.id} : {self.name}"
 
         
 
@@ -73,6 +84,7 @@ class Post(LikeableModel, models.Model):
     source = models.IntegerField(null=True, choices=SOURCES)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
+    embeddings = models.TextField(null=True)
     # comment_count = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -80,6 +92,12 @@ class Post(LikeableModel, models.Model):
     def __str__(self) -> str:
         return f"Post {self.id}"
     
+    def save(self, *args, **kwargs):
+        if not self.embeddings:
+            self.embeddings = model.encode(self.en_content)
+        
+        super(Post, self).save(*args, **kwargs)
+
     def get_comments(self):
         return self.comments.all()
     

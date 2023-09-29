@@ -17,7 +17,7 @@ admin.site.register(CustomUser)
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id',"user", "like_counts", "category",'short_content']
-    fields = ["user", "category",'source',"tags",'en_content','ar_content','like_counts']
+    fields = ["user", "category",'source',"tags",'embeddings','en_content','ar_content','like_counts']
     # readonly_fields = ["like_counts"]
     filter_horizontal = ["tags", 'liked_users']
 
@@ -32,7 +32,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    fields = ["category_id", 'name', 'description']
+    fields = ['name', 'embeddings', 'description']
 
 
 @admin.register(Comment)
