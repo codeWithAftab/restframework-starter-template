@@ -1,4 +1,4 @@
-from master.models import Verse, SunnahVerse
+from master.models import Verse, SunnahVerse, OnBoardingScreens
 from rest_framework import serializers
 from master.apis.quran.serializers import QuranicVerseSerializer
 from master.apis.sunnah.serializers import SunnahVerseSearchSerializer
@@ -46,3 +46,8 @@ class SearchQuranAndSunnahSerializer(serializers.Serializer):
         representation.pop('verse_number', None)
         representation.pop('verse_key', None)
         return representation
+
+class OnBoardingScreenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OnBoardingScreens
+        fields = "__all__"

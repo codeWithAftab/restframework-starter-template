@@ -239,6 +239,10 @@ def upload_hadiths_collection(instance, filename):
     # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
     return f'hadith/collection/{filename}'
 
+def upload_onboarding_images(instance, filename):
+    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
+    return f'onboarding/images/{filename}'
+
 
 # models for hadis features
 class SunnahCollection(models.Model):
@@ -308,3 +312,13 @@ class SunnahVerse(models.Model):
 
 #     class Meta:
 #         unique_together = ('user', 'hadith')
+
+class OnBoardingScreens(models.Model):
+    title = models.CharField(max_length=122)
+    description = models.TextField(null=True)
+    image = models.ImageField(upload_to=upload_onboarding_images)
+
+    def __str__(self):
+        return f"{self.title}"
+
+

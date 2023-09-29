@@ -59,3 +59,7 @@ class SearchQuranAndSunnahAPI(ListAPIView):
         text2 = re.sub(" +"," ",text2)
         # removing extra whitespaces.
         return text2 
+
+class OnBoardingScreenAPI(ListAPIView):
+    queryset = OnBoardingScreens.objects.all()
+    serializer_class = OnBoardingScreenSerializer
