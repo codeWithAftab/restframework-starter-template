@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 from django.db import models
 from account.models import CustomUser
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
+# model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
 class Category(models.Model):
     # category_id = models.IntegerField(unique=True)
@@ -93,8 +93,8 @@ class Post(LikeableModel, models.Model):
         return f"Post {self.id}"
     
     def save(self, *args, **kwargs):
-        if not self.embeddings:
-            self.embeddings = model.encode(self.en_content)
+        # if not self.embeddings:
+        #     self.embeddings = model.encode(self.en_content)
         
         super(Post, self).save(*args, **kwargs)
 
@@ -305,13 +305,6 @@ class SunnahVerse(models.Model):
         self.book.save()
 
 
-# class HadithBookmark(models.Model):
-#     user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE, related_name='hadith_bookmarks')
-#     hadith = models.ForeignKey(HadithData, on_delete=models.CASCADE, related_name='bookmarks')
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         unique_together = ('user', 'hadith')
 
 class OnBoardingScreens(models.Model):
     title = models.CharField(max_length=122)
