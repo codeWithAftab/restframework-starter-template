@@ -63,3 +63,4 @@ class SearchQuranAndSunnahAPI(ListAPIView):
 class OnBoardingScreenAPI(ListAPIView):
     queryset = OnBoardingScreens.objects.all()
     serializer_class = OnBoardingScreenSerializer
+    pagination_class = CustomLimitPagination
