@@ -6,6 +6,7 @@ from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, Ta
 from master.models import Category, Reply, Comment, Tag, Post
 from master.apis.general.pagination import CustomLimitPagination
 from firebase_auth.authentication import FirebaseAuthentication
+from .recomendation import PostRecomender
 
 
 class CustomListAPIView(ListAPIView):
@@ -53,8 +54,16 @@ class GetPostsApi(ListAPIView):
     queryset = Post.objects.prefetch_related('tags').all()
     serializer_class = PostsSerializer
     pagination_class = CustomLimitPagination
+    authentication_classes = [FirebaseAuthentication]
 
-class LikeUnlikePostApi(APIView):
+    def get_queryset(self):
+        user = self.request.user
+        print(user)
+        queryset = super().get_queryset()
+        recomender = PostRecomender(user=user, posts=queryset, top_n=100)
+        return recomender.get_prefered_posts()
+
+class LikeUnlikePostApi(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request, post_id=None):

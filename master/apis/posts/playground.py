@@ -224,43 +224,43 @@
 #   ]
 
 
-# def create_post_embeddings():
-#     posts = Post.objects.all()
-#     for post in posts:
-#         embedding = model.encode(post.en_content)
-#         print(embedding)
-#         embedding_str = str(embedding).replace('\n', ' ').strip()
-#         embedding_str = embedding_str.strip('[]')
-#         post.embeddings = embedding_str
-#         post.save()
-#         print(post)
+def create_post_embeddings():
+    posts = Post.objects.all()
+    for post in posts:
+        embedding = model.encode(post.en_content)
+        print(embedding)
+        embedding_str = str(embedding).replace('\n', ' ').strip()
+        embedding_str = embedding_str.strip('[]')
+        post.embeddings = embedding_str
+        post.save()
+        print(post)
 
 # def create_categories():
 #     for cat in Categories:
 #         Category.objects.create(name=cat["CategoryName"])
 
 
-# def get_prefered_posts():
-#     prefrence_embeddings = [model.encode(category) for category in categories]
-#     post_embeddings = [load_embeddings(post.embeddings) for post in posts]
-#     distances = cdist(
-#            prefrence_embeddings, post_embeddings, metric="cosine"
-#        )
+def get_prefered_posts():
+    prefrence_embeddings = [model.encode(category) for category in categories]
+    post_embeddings = [load_embeddings(post.embeddings) for post in posts]
+    distances = cdist(
+           prefrence_embeddings, post_embeddings, metric="cosine"
+       )
     
-#     print(distances)
+    print(distances)
 
-#     sorted_indices = np.argsort(distances[0])
-#     print(sorted_indices)
+    sorted_indices = np.argsort(distances[0])
+    print(sorted_indices)
 
-#     # Define the number of top indices you want to select (e.g., top_n)
-#     top_n = 10
+    # Define the number of top indices you want to select (e.g., top_n)
+    top_n = 10
 
-#     # Select the top N indices
-#     top_indices = sorted_indices[:top_n]
+    # Select the top N indices
+    top_indices = sorted_indices[:top_n]
 
-#     print(top_indices)
-#     for indice in top_indices:
-#         print("----HERE-----")
-#         print(int(indice))
-#         print(posts[int(indice)].en_content)
+    print(top_indices)
+    for indice in top_indices:
+        print("----HERE-----")
+        print(int(indice))
+        print(posts[int(indice)].en_content)
 
