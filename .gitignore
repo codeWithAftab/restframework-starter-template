@@ -1,6 +1,8 @@
 account/migrations
 master/migrations
 db.sqlite3
+static
+media
 mysite/__pycache__
 master/__pycache__
 master/apis/__pycache__
