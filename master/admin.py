@@ -1,18 +1,12 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from master.models import *
 from account.models import CustomUser
+from PIL import Image
+from django.core.exceptions import ValidationError
+from master.forms import OnBoardingScreenAdminForm
 
 # Register your models here.
 admin.site.register(CustomUser)
-# admin.site.register(Category)
-# admin.site.register(Tag)
-# # admin.site.register(Post)
-# admin.site.register(Reply)
-
-# class LikeableModelAdmin(admin.ModelAdmin):
-#     list_display = ('like_counts',)  # Add other fields you want to display
-#     readonly_fields = ('like_counts',)  # Make the field read-only
-
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -48,6 +42,9 @@ class ReplyAdmin(admin.ModelAdmin):
     filter_horizontal = ['liked_users']
 
 
+class OnBoardingScreenAdmin(admin.ModelAdmin):
+    form = OnBoardingScreenAdminForm
+
 admin.site.register(Chapter)
 admin.site.register(Verse)
 admin.site.register(Language)
@@ -56,4 +53,4 @@ admin.site.register(Narration)
 admin.site.register(SunnahCollection)
 admin.site.register(SunnahBook)
 admin.site.register(SunnahVerse)
-admin.site.register(OnBoardingScreens)
+admin.site.register(OnBoardingScreens, OnBoardingScreenAdmin)
