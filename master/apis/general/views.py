@@ -10,6 +10,7 @@ from .pagination import CustomLimitPagination
 from .prayertime import PrayTimes
 import requests
 from django.db.models import F, Value, CharField
+from .islamic_functions import Qibla
 import json
 import random
 import re
@@ -59,6 +60,24 @@ class SearchQuranAndSunnahAPI(ListAPIView):
         text2 = re.sub(" +"," ",text2)
         # removing extra whitespaces.
         return text2 
+
+class QiblaDirectionAPI(APIView):
+    def get(self, request):
+        try:
+            latitude = float(request.GET["latitude"])
+            longitude = float(request.GET["longitude"])
+            qibla = Qibla()
+            direction = qibla.get_direction(latitude=latitude, longitude=longitude)
+            response = {
+                "latitude": latitude,
+                "longitude": longitude,
+                "direction": direction
+            }
+            return Response(response)
+        
+        except Exception as e:
+            return Response({"msg":f"Missing {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class OnBoardingScreenAPI(ListAPIView):
     queryset = OnBoardingScreens.objects.all()
