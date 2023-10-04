@@ -57,7 +57,7 @@ class GetPostsAPI(ListAPIView):
     queryset = Post.objects.all()
     pagination_class = CustomLimitPagination
 
-class LikeUnlikePostApi(ExtendedAPIViewclass):
+class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request, post_id=None):
