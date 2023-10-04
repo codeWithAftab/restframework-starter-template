@@ -69,9 +69,11 @@ class QiblaDirectionAPI(APIView):
             qibla = Qibla()
             direction = qibla.get_direction(latitude=latitude, longitude=longitude)
             response = {
-                "latitude": latitude,
-                "longitude": longitude,
-                "direction": direction
+                "data": { 
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "direction": direction
+                }
             }
             return Response(response)
         
