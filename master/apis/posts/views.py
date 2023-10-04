@@ -2,12 +2,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
-from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, TagSerializer, CategorySerializer
-from master.models import Category, Reply, Comment, Tag, Post
+from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, TagSerializer, CategorySerializer, PostViewSerializer
+from master.models import Category, Reply, Comment, Tag, Post, PostView
 from master.apis.general.pagination import CustomLimitPagination
 from firebase_auth.authentication import FirebaseAuthentication
 from .recomendation import PostRecomender
-
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
 
 class CustomListAPIView(ListAPIView):
     def __init__(self) -> None:
@@ -42,28 +44,29 @@ class ExtendedAPIViewclass(APIView):
     def _handle_reply_not_found(self):
         return Response({"error_code": "reply_not_found", "msg": "Reply not found."}, status=status.HTTP_404_NOT_FOUND)
     
-class GetTagsListApi(CustomListAPIView):
+class GetTagsListAPI(CustomListAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
-class GetCategoryListApi(CustomListAPIView):
+class GetCategoryListAPI(CustomListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class GetPostsApi(ListAPIView):
-    queryset = Post.objects.prefetch_related('tags').all()
+class GetPostsAPI(ListAPIView):
     serializer_class = PostsSerializer
     pagination_class = CustomLimitPagination
     authentication_classes = [FirebaseAuthentication]
 
     def get_queryset(self):
         user = self.request.user
-        print(user)
-        queryset = super().get_queryset()
+        # Calculate the date 1 month ago from the current date
+        one_month_ago = timezone.now() - timedelta(days=30)
+        queryset = Post.objects.exclude(Q(views__user=user) & Q(views__last_view__gt=one_month_ago))
+
         recomender = PostRecomender(user=user, posts=queryset, top_n=100)
         return recomender.get_prefered_posts()
 
-class LikeUnlikePostApi(ExtendedAPIViewclass):
+class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request, post_id=None):
@@ -128,7 +131,7 @@ class LikeUnlikePostApi(ExtendedAPIViewclass):
         except Exception as e:
             return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
         
-class CommentApi(ExtendedAPIViewclass):
+class CommentAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request, post_id=None):
@@ -192,7 +195,7 @@ class CommentApi(ExtendedAPIViewclass):
         except Exception as e:
             return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
         
-class ReplyCommentApi(ExtendedAPIViewclass):
+class ReplyCommentAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request, comment_id=None):
@@ -256,7 +259,7 @@ class ReplyCommentApi(ExtendedAPIViewclass):
         except Exception as e:
             return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
         
-class LikeUnlikeComment(ExtendedAPIViewclass):
+class LikeUnlikeCommentAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request, post_id=None, comment_id=None):
@@ -320,5 +323,51 @@ class LikeUnlikeComment(ExtendedAPIViewclass):
 
         except Exception as e:
             return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
-        
 
+class PostViewsAPI(ExtendedAPIViewclass):
+    authentication_classes = [FirebaseAuthentication]
+
+    def get(self, request, post_id=None):
+        if not post_id:
+           return self._handle_missing_post_id()
+        
+        try:
+            post_views = PostView.objects.filter(user=request.user)
+            response = {
+                "data": PostViewSerializer(post_views, many=True).data
+            }
+            return Response(response)
+
+        except Post.DoesNotExist:
+            return self._handle_post_not_found()
+        
+        except Exception as e:
+            return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    def post(self, request, post_id=None):
+        if not post_id:
+           return self._handle_missing_post_id()
+
+        try:
+            post = Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            return self._handle_post_not_found()
+        
+        try:
+            post_view = PostView.objects.get(user=request.user, post=post)
+            post_view.count += 1
+            post_view.save()
+
+        except PostView.DoesNotExist:
+            post_view = PostView.objects.create(user=request.user, post=post)
+        
+        try:
+            serializer = PostViewSerializer(post_view)
+            response = {
+                "data": serializer.data
+            }
+            return Response(response)
+
+        except Exception as e:
+            return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        

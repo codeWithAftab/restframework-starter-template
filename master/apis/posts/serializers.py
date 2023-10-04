@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from master.models import Post, Comment, Reply, Tag, Category, LikeableModel
+from master.models import Post, Comment, Reply, Tag, Category, LikeableModel, PostView
 from account.api.serializers import UserSerializer_v2, UserSerializer
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -88,4 +88,9 @@ class PostsSerializer(serializers.ModelSerializer):
 
         return representation
         
+class PostViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PostView
+        fields = "__all__"
 
