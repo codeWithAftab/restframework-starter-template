@@ -109,7 +109,19 @@ class Post(LikeableModel, models.Model):
         comment.is_removed = True
         comment.save()
 
-        
+class PostView(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="post_views")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="views")
+    count = models.PositiveIntegerField(default=0)
+    last_view = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.post} -> {self.user}"
+    
+    class Meta:
+        unique_together = ('user', 'post')
+
+
 class Comment(LikeableModel, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='comments')

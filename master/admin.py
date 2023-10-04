@@ -5,8 +5,6 @@ from PIL import Image
 from django.core.exceptions import ValidationError
 from master.forms import OnBoardingScreenAdminForm
 
-# Register your models here.
-admin.site.register(CustomUser)
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -53,4 +51,5 @@ admin.site.register(Narration)
 admin.site.register(SunnahCollection)
 admin.site.register(SunnahBook)
 admin.site.register(SunnahVerse)
+admin.site.register(PostView)
 admin.site.register(OnBoardingScreens, OnBoardingScreenAdmin)
