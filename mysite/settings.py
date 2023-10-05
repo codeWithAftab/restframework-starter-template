@@ -75,21 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-
-# DATABASES = {
-#         'default': {
-#             'ENGINE': 'djongo',
-#             'NAME': 'mydeen',
-#             'CLIENT': {
-#                 'host': 'mongodb+srv://mydeenlocal:localmydeenapp@cluster0.d4qcgn9.mongodb.net/?retryWrites=true&w=majority'
-#             }
-#         }
-#     }
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
 DATABASES = {
     'default': {
