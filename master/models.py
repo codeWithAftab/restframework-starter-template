@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 from django.db import models
 from account.models import CustomUser
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
+# model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
 class Category(models.Model):
     # category_id = models.IntegerField(unique=True)
