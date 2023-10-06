@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 from django.db import models
 from account.models import CustomUser
-# from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
-# model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
+model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
 class Category(models.Model):
     # category_id = models.IntegerField(unique=True)
@@ -23,8 +23,6 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return f"{self.id} : {self.name}"
-
-        
 
 class Tag(models.Model):
     tag_id = models.IntegerField(unique=True)
@@ -93,8 +91,8 @@ class Post(LikeableModel, models.Model):
         return f"Post {self.id}"
     
     def save(self, *args, **kwargs):
-        # if not self.embeddings:
-        #     self.embeddings = model.encode(self.en_content)
+        if not self.embeddings:
+            self.embeddings = model.encode(self.en_content)
         
         super(Post, self).save(*args, **kwargs)
 
@@ -171,7 +169,6 @@ class Reply(LikeableModel, models.Model):
     def __str__(self) -> str:
         return f"{self.user} : {self.comment}"
 
-
 class Narration(models.Model):
     narration_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=100, null=True, blank= True)
@@ -213,7 +210,6 @@ class QuranJuz(models.Model):
 
     def __str__(self) -> str:
         return f"{self.juz_id} : Name : {self.en_name}"
-
 
 class Language(models.Model):
     language_id = models.IntegerField(unique=True)

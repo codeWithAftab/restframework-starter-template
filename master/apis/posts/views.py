@@ -57,6 +57,12 @@ class GetPostsAPI(ListAPIView):
     queryset = Post.objects.all()
     pagination_class = CustomLimitPagination
 
+    def get_queryset(self):
+        user = self.request.user
+        queryset = super().get_queryset()
+        recomender = PostRecomender(user=user, posts=queryset)
+        return recomender.get_prefered_posts()
+
 class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
