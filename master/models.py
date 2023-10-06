@@ -91,8 +91,8 @@ class Post(LikeableModel, models.Model):
         return f"Post {self.id}"
     
     def save(self, *args, **kwargs):
-        if not self.embeddings:
-            self.embeddings = model.encode(self.en_content)
+        # if not self.embeddings:
+        #     self.embeddings = model.encode(self.en_content)
         
         super(Post, self).save(*args, **kwargs)
 
