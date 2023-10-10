@@ -82,7 +82,6 @@ class Post(LikeableModel, models.Model):
     source = models.IntegerField(null=True, choices=SOURCES)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
-    # audio = 
     embeddings = models.TextField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

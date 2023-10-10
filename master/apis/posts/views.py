@@ -9,6 +9,7 @@ from firebase_auth.authentication import FirebaseAuthentication
 # from .recomendation import PostRecomender
 from django.db.models import Q
 from django.utils import timezone
+import random
 from datetime import timedelta
 
 class CustomListAPIView(ListAPIView):
@@ -63,6 +64,10 @@ class GetPostsAPI(ListAPIView):
     #     queryset = super().get_queryset()
     #     recomender = PostRecomender(user=user, posts=queryset)
     #     return recomender.get_prefered_posts()
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        random.shuffle(queryset)
+        return queryset
 
 class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
