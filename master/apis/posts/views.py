@@ -65,7 +65,7 @@ class GetPostsAPI(ListAPIView):
     #     recomender = PostRecomender(user=user, posts=queryset)
     #     return recomender.get_prefered_posts()
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = list(super().get_queryset())
         random.shuffle(queryset)
         return queryset
 
