@@ -75,11 +75,7 @@ class Post(LikeableModel, models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
-    SOURCES = (
-        (0, "Al-Quran"),
-        (1, "Al-Hadith")
-    )
-    source = models.IntegerField(null=True, choices=SOURCES)
+    source = models.CharField(max_length=132, null=True, blank=True)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
     embeddings = models.TextField(null=True)
