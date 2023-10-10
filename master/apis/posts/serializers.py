@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from master.models import Post, Comment, Reply, Tag, Category, LikeableModel, PostView
 from account.api.serializers import UserSerializer_v2, UserSerializer
+from django.db.models import Sum
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,10 +59,25 @@ class PostsSerializer(serializers.ModelSerializer):
     liked_users = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
     source = serializers.SerializerMethodField()
+    views_count = serializers.SerializerMethodField()
+    comment_count = serializers.SerializerMethodField()
+    is_audio_available = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id','user','source','category','ar_content',"en_content",'like_counts','liked_users','tags','created_on','updated_on']
+        fields = ['id','user','source','category','ar_content',"en_content",'like_counts', 'comment_count', 'is_audio_available', 'liked_users','views_count','tags','created_on','updated_on']
+
+    def get_views_count(self, obj):
+        count = obj.views.aggregate(Sum('count'))["count__sum"]
+        if count:
+            return count
+        return 0
+    
+    def get_is_audio_available(self, obj):
+        return False
+    
+    def get_comment_count(self, obj):
+        return len(obj.comments.all())
 
     def get_source(self, obj):
         if obj.source == 1:

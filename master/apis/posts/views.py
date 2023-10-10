@@ -6,7 +6,7 @@ from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, Ta
 from master.models import Category, Reply, Comment, Tag, Post, PostView
 from master.apis.general.pagination import CustomLimitPagination
 from firebase_auth.authentication import FirebaseAuthentication
-# from .recomendation import PostRecomender
+from .recomendation import PostRecomender
 from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
@@ -54,14 +54,14 @@ class GetCategoryListAPI(CustomListAPIView):
 
 class GetPostsAPI(ListAPIView):
     serializer_class = PostsSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.prefetch_related("views").all()
     pagination_class = CustomLimitPagination
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     queryset = super().get_queryset()
-    #     recomender = PostRecomender(user=user, posts=queryset)
-    #     return recomender.get_prefered_posts()
+    def get_queryset(self):
+        user = self.request.user
+        queryset = super().get_queryset()
+        recomender = PostRecomender(user=user, posts=queryset)
+        return recomender.get_prefered_posts()
 
 class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
@@ -354,7 +354,7 @@ class PostViewsAPI(ExtendedAPIViewclass):
             post_view.save()
 
         except PostView.DoesNotExist:
-            post_view = PostView.objects.create(user=request.user, post=post)
+            post_view = PostView.objects.create(user=request.user, post=post, count=1)
         
         try:
             serializer = PostViewSerializer(post_view)

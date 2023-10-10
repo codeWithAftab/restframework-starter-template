@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 from django.db import models
 from account.models import CustomUser
-# from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
-# model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
+model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
 class Category(models.Model):
     # category_id = models.IntegerField(unique=True)
@@ -82,8 +82,8 @@ class Post(LikeableModel, models.Model):
     source = models.IntegerField(null=True, choices=SOURCES)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
+    # audio = 
     embeddings = models.TextField(null=True)
-    # comment_count = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -91,8 +91,8 @@ class Post(LikeableModel, models.Model):
         return f"Post {self.id}"
     
     def save(self, *args, **kwargs):
-        # if not self.embeddings:
-        #     self.embeddings = model.encode(self.en_content)
+        if not self.embeddings:
+            self.embeddings = model.encode(self.en_content)
         
         super(Post, self).save(*args, **kwargs)
 
@@ -118,7 +118,6 @@ class PostView(models.Model):
     
     class Meta:
         unique_together = ('user', 'post')
-
 
 class Comment(LikeableModel, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
@@ -242,7 +241,6 @@ class ChapterAudio(models.Model):
 
 
 # hadith models
-
 def upload_hadiths_collection(instance, filename):
     # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
     return f'hadith/collection/{filename}'
@@ -265,7 +263,6 @@ class SunnahCollection(models.Model):
   
     def __str__(self):
         return f"{self.name} "
-
 
 class SunnahBook(models.Model):
     collection = models.ForeignKey(SunnahCollection,on_delete=models.CASCADE,related_name="books")
@@ -311,8 +308,6 @@ class SunnahVerse(models.Model):
     def _change_update_status_of_book(self):
         self.book.updated_on = self.updated_on
         self.book.save()
-
-
 
 class OnBoardingScreens(models.Model):
     title = models.CharField(max_length=122)

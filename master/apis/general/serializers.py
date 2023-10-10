@@ -2,14 +2,6 @@ from master.models import Verse, SunnahVerse, OnBoardingScreens
 from rest_framework import serializers
 from master.apis.quran.serializers import QuranicVerseSerializer
 from master.apis.sunnah.serializers import SunnahVerseSearchSerializer
-# class SearchQuranAndSunnahSerializer(serializers.Serializer):
-#     # collection = models.ForeignKey(SunnahCollection, on_delete=models.CASCADE, related_name="verses")
-#     hadith_id = serializers.IntegerField(default=None)
-#     book = serializers.IntegerField()
-#     narrated_by =  serializers.CharField(default=None)
-#     source =  serializers.CharField(default=None)
-#     content = serializers.CharField()
-#     verse_type = serializers.CharField()
 
 
 class SearchQuranAndSunnahSerializer(serializers.Serializer):
