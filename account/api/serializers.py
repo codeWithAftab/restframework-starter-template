@@ -6,7 +6,7 @@ from firebase_admin import auth
 class UserSerializer_v2(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('uid', 'email', 'is_email_verified', 'first_name', 'last_name')
+        fields = ('uid', 'email', 'username', 'cover_image', 'first_name')
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -3,6 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from account.managers import CustomUserManager
 
 
+def upload_profile_images(instance, filename):
+    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
+    return f'accounts/{instance.uid}/{filename}'
+
+
 # Create your models here.
 class CustomUser(AbstractUser):
     uid = models.CharField(max_length=255, null=True, blank=True) # add unique=True
@@ -11,6 +16,7 @@ class CustomUser(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     first_name  = models.CharField(max_length=20, null=True, blank=True)
     last_name  = models.CharField(max_length=20, null=True, blank=True)
+    cover_image = models.ImageField(upload_to=upload_profile_images, null=True)
     address_line_1 = models.CharField(max_length=200, null=True, blank=True)
     address_line_2 = models.CharField(max_length=200, null=True, blank=True)
     zip_code = models.CharField(max_length=6, null=True, blank=True)

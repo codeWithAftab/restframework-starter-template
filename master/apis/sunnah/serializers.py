@@ -1,7 +1,6 @@
 from master.models import SunnahBook, SunnahCollection, SunnahVerse
 from rest_framework import serializers
 
-
 class SunnahCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SunnahCollection

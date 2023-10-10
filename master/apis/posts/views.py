@@ -68,6 +68,11 @@ class GetPostsAPI(ListAPIView):
         queryset = list(super().get_queryset())
         random.shuffle(queryset)
         return queryset
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
 
 class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
