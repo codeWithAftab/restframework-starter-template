@@ -6,7 +6,7 @@ from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, Ta
 from master.models import Category, Reply, Comment, Tag, Post, PostView
 from master.apis.general.pagination import CustomLimitPagination
 from firebase_auth.authentication import FirebaseAuthentication
-from .recomendation import PostRecomender
+# from .recomendation import PostRecomender
 from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
@@ -58,11 +58,11 @@ class GetPostsAPI(ListAPIView):
     pagination_class = CustomLimitPagination
     authentication_classes = [FirebaseAuthentication]
 
-    def get_queryset(self):
-        user = self.request.user
-        queryset = super().get_queryset()
-        recomender = PostRecomender(user=user, posts=queryset)
-        return recomender.get_prefered_posts()
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     queryset = super().get_queryset()
+    #     recomender = PostRecomender(user=user, posts=queryset)
+    #     return recomender.get_prefered_posts()
 
 class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
