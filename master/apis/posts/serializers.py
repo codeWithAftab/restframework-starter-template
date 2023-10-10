@@ -64,7 +64,6 @@ class PostsSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username")
     user_cover_image = serializers.SerializerMethodField()
     liked_users = serializers.SerializerMethodField()
-    source = serializers.SerializerMethodField()
     views_count = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     is_audio_available = serializers.SerializerMethodField()
@@ -93,12 +92,7 @@ class PostsSerializer(serializers.ModelSerializer):
 
     def get_comment_count(self, obj):
         return len(obj.comments.all())
-
-    def get_source(self, obj):
-        if obj.source == 0:
-            return "Al-Quran"
-        return "Al-Hadith"
-
+    
     def get_liked_users(self, obj):
         show_liked_users = self.context.get('show_liked_users', False)
         if not show_liked_users:
