@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 from django.db import models
 from account.models import CustomUser
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
+# model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
 class Category(models.Model):
     # category_id = models.IntegerField(unique=True)
@@ -16,8 +16,8 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
     def save(self, *args, **kwargs):
-        if not self.embeddings:
-            self.embeddings = model.encode(self.name)
+        # if not self.embeddings:
+        #     self.embeddings = model.encode(self.name)
 
         return super(Category, self).save(*args, **kwargs)
 
