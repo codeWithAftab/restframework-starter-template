@@ -13,3 +13,4 @@ master/apis/quran/__pycache__
 master/apis/sunnah/__pycache__
 account/__pycache__
 account/api/__pycache__
+firebase_auth/__pycache__

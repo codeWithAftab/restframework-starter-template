@@ -56,6 +56,7 @@ class GetPostsAPI(ListAPIView):
     serializer_class = PostsSerializer
     queryset = Post.objects.prefetch_related("views").all()
     pagination_class = CustomLimitPagination
+    authentication_classes = [FirebaseAuthentication]
 
     def get_queryset(self):
         user = self.request.user
