@@ -25,7 +25,7 @@ class CustomUser(AbstractUser):
     created_on = models.DateTimeField(auto_now_add=True, null=True)
     updated_on = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
-    categories = models.ManyToManyField("master.category")
+    # categories = models.ManyToManyField("master.category")
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
