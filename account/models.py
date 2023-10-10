@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     first_name  = models.CharField(max_length=20, null=True, blank=True)
     last_name  = models.CharField(max_length=20, null=True, blank=True)
-    cover_image = models.ImageField(upload_to=upload_profile_images, null=True)
+    # cover_image = models.ImageField(upload_to=upload_profile_images, null=True)
     address_line_1 = models.CharField(max_length=200, null=True, blank=True)
     address_line_2 = models.CharField(max_length=200, null=True, blank=True)
     zip_code = models.CharField(max_length=6, null=True, blank=True)
