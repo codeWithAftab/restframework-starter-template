@@ -2,22 +2,22 @@ from master.models import *
 
 def add_quran_source():
     quran_verses = Verse.objects.filter(language_id=1)
-    quran_posts = Post.objects.filter(user__uid="quran-ids")
+    quran_posts = Post.objects.filter(book__book_id=1)
     print(quran_posts)
 
     for verse, post in zip(quran_verses, quran_posts):
-        source = f"{verse.chapter.en_name} : {verse.verse_number}"
+        source = f"{verse.chapter.translit_name} : {verse.verse_number}"
         post.source = source
         print(post)
         post.save()
 
 def add_hadith_source():
     hadith_verses = SunnahVerse.objects.filter(collection_id=1)
-    hadith_posts = Post.objects.filter(user__uid="hadith-ids")
+    hadith_posts = Post.objects.filter(book__book_id=2)
     print(hadith_posts)
 
     for verse, post in zip(hadith_verses, hadith_posts):
-        source = f"{verse.collection.name} {verse.book.book_id}:{verse.number}"
+        source = f"{verse.book.en_name}:{verse.number}"
         post.source = source
         print(post)
         post.save()
