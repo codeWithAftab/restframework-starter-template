@@ -60,9 +60,9 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class PostsSerializer(serializers.ModelSerializer):
-    # user = serializers.SerializerMethodField()
-    username = serializers.CharField(source="user.username")
-    user_cover_image = serializers.SerializerMethodField()
+    # username = serializers.CharField(source="user.username")
+    book_name = serializers.CharField(source="book.en_name")
+    book_cover = serializers.SerializerMethodField()
     liked_users = serializers.SerializerMethodField()
     views_count = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
@@ -70,7 +70,7 @@ class PostsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'username', 'source', "user_cover_image",  'ar_content', "en_content", 'like_counts', 'comment_count',
+        fields = ['id', 'source', "book_name", "book_cover",  'ar_content', "en_content", 'like_counts', 'comment_count',
                   'is_audio_available', 'views_count', 'liked_users', 'created_on', 'updated_on']
 
     def get_views_count(self, obj):
@@ -82,9 +82,9 @@ class PostsSerializer(serializers.ModelSerializer):
     # def get_user(self, obj):
     #     return UserSerializer_v2(obj.user).data
     
-    def get_user_cover_image(self, obj):
+    def get_book_cover(self, obj):
         request = self.context.get('request')
-        image_url = obj.user.cover_image.url
+        image_url = obj.book.cover_image.url
         return request.build_absolute_uri(image_url)
 
     def get_is_audio_available(self, obj):

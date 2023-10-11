@@ -21,11 +21,14 @@ class PostAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     fields = ['tag_id',"name"]
 
+@admin.register(IslamicBook)
+class IslamicBookAdmin(admin.ModelAdmin):
+    list_display = ["book_id",'en_name',"ar_name", 'cover_image']
+    fields = ["book_id",'en_name',"ar_name", 'cover_image', 'is_available']
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     fields = ['name', 'embeddings', 'description']
-
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

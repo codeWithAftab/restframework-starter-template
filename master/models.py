@@ -5,6 +5,18 @@ from account.models import CustomUser
 
 # model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L6-v2")
 
+def upload_hadiths_collection(instance, filename):
+    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
+    return f'hadith/collection/{filename}'
+
+def upload_onboarding_images(instance, filename):
+    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
+    return f'onboarding/images/{filename}'
+
+def book_cover_upload_images(instance, filename):
+    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
+    return f'Books/{instance.en_name}/{filename}'
+
 class Category(models.Model):
     # category_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=122)
@@ -18,11 +30,29 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         # if not self.embeddings:
         #     self.embeddings = model.encode(self.name)
-
         return super(Category, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"{self.id} : {self.name}"
+    
+class IslamicBook(models.Model):
+    """ this model is for those books which content we are using for post.
+        like : Quran, Hadith :- Shahih-Al-Bukhari. Shahih-Al-Muslim.
+    
+    argument -- this model is for those books which content we are using for post
+    Return: book_instance
+    """
+    book_id = models.IntegerField()
+    en_name = models.CharField(max_length=122, null=True, verbose_name="English Name")
+    ar_name = models.CharField(max_length=122, null=True, verbose_name="Arabic Name")
+    ar_translit_name = models.CharField(max_length=122, null=True, verbose_name="Arabic Translit Name")
+    cover_image = models.ImageField(upload_to=book_cover_upload_images, null=True, blank=True)
+    is_available = models.BooleanField(default=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.en_name
 
 class Tag(models.Model):
     tag_id = models.IntegerField(unique=True)
@@ -73,6 +103,7 @@ class LikeableModel(models.Model):
 
 class Post(LikeableModel, models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
+    book = models.ForeignKey(IslamicBook, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     source = models.CharField(max_length=132, null=True, blank=True)
@@ -234,17 +265,6 @@ class ChapterAudio(models.Model):
     chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name="audio")
     file = models.FileField(upload_to="")
 
-
-# hadith models
-def upload_hadiths_collection(instance, filename):
-    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
-    return f'hadith/collection/{filename}'
-
-def upload_onboarding_images(instance, filename):
-    # file will be uploaded to MEDIA_ROOT / audio/chapters/{reciter_name}/filename.mp3
-    return f'onboarding/images/{filename}'
-
-
 # models for hadis features
 class SunnahCollection(models.Model):
     collection_id = models.IntegerField(unique=True)
@@ -312,3 +332,8 @@ class OnBoardingScreens(models.Model):
         return f"{self.title}"
 
 
+
+    
+
+
+    

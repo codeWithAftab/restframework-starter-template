@@ -12,6 +12,7 @@ from django.utils import timezone
 import random
 from datetime import timedelta
 
+
 class CustomListAPIView(ListAPIView):
     def __init__(self) -> None:
         self.is_many = True
@@ -64,6 +65,7 @@ class GetPostsAPI(ListAPIView):
     #     queryset = super().get_queryset()
     #     recomender = PostRecomender(user=user, posts=queryset)
     #     return recomender.get_prefered_posts()
+
     def get_queryset(self):
         queryset = list(super().get_queryset())
         random.shuffle(queryset)

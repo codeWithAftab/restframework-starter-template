@@ -19,6 +19,23 @@ def add_hadith_source():
     for verse, post in zip(hadith_verses, hadith_posts):
         source = f"{verse.collection.name} {verse.book.book_id}:{verse.number}"
         post.source = source
-        # print(post)
+        print(post)
+        post.save()
+
+def add_books():
+    hadith_post = Post.objects.filter(user__uid="hadith-ids")
+    quran_post = Post.objects.filter(user__uid="quran-ids")
+
+    hadith_book = IslamicBook.objects.get(book_id=2)
+    quran_book = IslamicBook.objects.get(book_id=1)
+    
+    for post in hadith_post:
+        post.book = hadith_book
+        print(post)
+        post.save()
+
+    for post in quran_post:
+        post.book = quran_book
+        print(post)
         post.save()
     
