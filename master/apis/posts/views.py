@@ -68,7 +68,7 @@ class GetPostsAPI(ListAPIView):
 
     def get_queryset(self):
         queryset = list(super().get_queryset())
-        random.shuffle(queryset)
+        # random.shuffle(queryset)
         return queryset
     
     def get_serializer_context(self):
