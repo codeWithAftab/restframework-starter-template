@@ -5,6 +5,8 @@ from master.models import Chapter
 from .serializers import *
 from rest_framework.response import Response
 from django.db.models import Prefetch, Q, F
+from master.utils import compress_data
+from django.http import HttpResponse
 import re
 
 
@@ -18,7 +20,7 @@ class QuranChaptersApi(ListAPIView):
             return Chapter.objects.get(chapter_id=chapter_id)
         
         self.is_many = True
-        return Chapter.objects.all()
+        return Chapter.objects.prefetch_related('verses').all()
     
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -26,12 +28,16 @@ class QuranChaptersApi(ListAPIView):
         context["params"] = params
         return context
     
-    def get(self, request, chapter_id=None):
-        serializer = self.get_serializer(self.get_queryset(), many=self.is_many)
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        # print(compressed_data)
         response = {
             "data": serializer.data
         }
-        return Response(response)
+        compressed_data = compress_data(response)
+        response = HttpResponse(compressed_data, content_type='application/json')
+        response['Content-Encoding'] = 'gzip'
+        return response
 
 class SearchQuran(ListAPIView):
     serializer_class = ChapterSearchSerializer

@@ -6,6 +6,8 @@ from rest_framework.pagination import PageNumberPagination
 from .serializers import *
 from rest_framework.response import Response
 from django.db.models import Prefetch, Q, F
+from master.utils import compress_data
+from django.http import HttpResponse
 import re
 
 class CustomListAPIView(ListAPIView):
@@ -36,6 +38,18 @@ class SunnahBookAPI(CustomListAPIView):
         params = self.request.GET
         context["params"] = params
         return context
+    
+    
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        # print(compressed_data)
+        response = {
+            "data": serializer.data
+        }
+        compressed_data = compress_data(response)
+        response = HttpResponse(compressed_data, content_type='application/json')
+        response['Content-Encoding'] = 'gzip'
+        return response
     
 class SunnahVerseSearchAPI(ListAPIView):
     serializer_class = SunnahVerseSearchSerializer
@@ -73,4 +87,4 @@ class SunnahBookSearchAPI(ListAPIView):
         params = self.request.GET
         context["params"] = params
         return context
-
+    

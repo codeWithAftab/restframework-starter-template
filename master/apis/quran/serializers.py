@@ -24,7 +24,7 @@ class ChapterSerializer(serializers.ModelSerializer):
         params = self.context["params"]
         if params.get("show_verse", False):
             language_id = params.get("language_id", 0) 
-            verses = obj.verses.filter(language__language_id=language_id)
+            verses = obj.verses.prefetch_related("language").filter(language__language_id=language_id)
             verse_serializer = QuranicVerseSerializer(verses, many=True)
             return verse_serializer.data
         
