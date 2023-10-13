@@ -76,6 +76,15 @@ class GetPostsAPI(ListAPIView):
         context["request"] = self.request
         return context
 
+class GetUserLikedPost(ListAPIView):
+    serializer_class = PostsSerializer
+    authentication_classes = [FirebaseAuthentication]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(liked_users=user)
+
+
 class LikeUnlikePostAPI(ExtendedAPIViewclass):
     authentication_classes = [FirebaseAuthentication]
 
