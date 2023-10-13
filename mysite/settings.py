@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'master',
     'account',
     'firebase_auth',
@@ -107,6 +108,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'master.apis.general.pagination.CustomLimitPagination',
     'PAGE_SIZE': 20
 }
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
