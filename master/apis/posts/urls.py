@@ -5,6 +5,7 @@ urlpatterns = [
     path("categories/", views.GetCategoryListAPI.as_view(), name="categories"),
     path("tags/", views.GetTagsListAPI.as_view(), name="tags"),
     path("posts/", views.GetPostsAPI.as_view(), name="posts"),
+    path("posts/islamic-books/", views.GetBooks.as_view(), name="books"),
     path("posts/user-liked/", views.GetUserLikedPost.as_view(), name="liked-post"),
     path("post/<int:post_id>/like/", views.LikeUnlikePostAPI.as_view(), name="like"),
     path("post/<int:post_id>/view/", views.PostViewsAPI.as_view(), name="view"),

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from master.models import Post, Comment, Reply, Tag, Category, LikeableModel, PostView
+from master.models import Post, Comment, Reply, Tag, Category, LikeableModel, PostView, IslamicBook
 from account.api.serializers import UserSerializer_v2, UserSerializer
 from django.db.models import Sum
 
@@ -128,6 +128,12 @@ class PostViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostView
         fields = "__all__"
+
+class IslamicBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IslamicBook
+        fields = "__all__"
+
 
 
 # class MCQOptionSerializer(serializers.ModelSerializer):

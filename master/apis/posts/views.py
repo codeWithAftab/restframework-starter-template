@@ -2,8 +2,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
-from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, TagSerializer, CategorySerializer, PostViewSerializer
-from master.models import Category, Reply, Comment, Tag, Post, PostView
+from .serializers import PostsSerializer, ReplySerializer, CommentSerializer, TagSerializer, CategorySerializer, PostViewSerializer, IslamicBookSerializer
+from master.models import Category, Reply, Comment, Tag, Post, PostView, IslamicBook
 from master.apis.general.pagination import CustomLimitPagination
 from firebase_auth.authentication import FirebaseAuthentication
 # from .recomendation import PostRecomender
@@ -387,4 +387,7 @@ class PostViewsAPI(ExtendedAPIViewclass):
 
         except Exception as e:
             return Response({"error_code": "internal_server_error", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+    
+class GetBooks(ListAPIView):
+    queryset = IslamicBook.objects.all()
+    serializer_class = IslamicBookSerializer
