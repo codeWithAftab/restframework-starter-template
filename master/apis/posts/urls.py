@@ -1,5 +1,6 @@
 from django.urls import path
 from master.apis.posts import views
+from master.apis.posts import staff_views
 
 urlpatterns = [
     path("categories/", views.GetCategoryListAPI.as_view(), name="categories"),
@@ -13,3 +14,9 @@ urlpatterns = [
     path("post/<int:post_id>/comment/<int:comment_id>/like/", views.LikeUnlikeCommentAPI.as_view(), name="comment_like"),
     path("post/comment/<int:comment_id>/reply/", views.ReplyCommentAPI.as_view(), name="replies")
 ] 
+
+staff_urlpatterns = [
+    path("staff/posts/", staff_views.GetIslamicPosts.as_view(), name="get_posts"),
+] 
+
+urlpatterns += staff_urlpatterns
