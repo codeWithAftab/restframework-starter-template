@@ -43,8 +43,8 @@ class ReplyAdmin(admin.ModelAdmin):
     filter_horizontal = ['liked_users']
 
 
-class OnBoardingScreenAdmin(admin.ModelAdmin):
-    form = OnBoardingScreenAdminForm
+# class OnBoardingScreenAdmin(admin.ModelAdmin):
+#     form = OnBoardingScreenAdminForm
 
 admin.site.register(Chapter)
 admin.site.register(Verse)
@@ -55,4 +55,4 @@ admin.site.register(SunnahCollection)
 admin.site.register(SunnahBook)
 admin.site.register(SunnahVerse)
 admin.site.register(PostView)
-admin.site.register(OnBoardingScreens, OnBoardingScreenAdmin)
+admin.site.register(OnBoardingScreens)
