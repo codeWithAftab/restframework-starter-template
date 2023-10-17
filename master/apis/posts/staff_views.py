@@ -18,14 +18,14 @@ class GetIslamicPostsAPI(ListAPIView):
 
     def get_queryset(self):
         book_id = self.request.GET["book_id"]
-        is_verified = self.request.GET.get('is_verified', None)
-        if is_verified == None:
-            return Post.objects.prefetch_related("views").filter(book__book_id=book_id)
-        
-        if is_verified:
+        filter = self.request.GET.get('filter')
+        if filter == "verified":
             return Post.objects.prefetch_related("views").filter(book__book_id=book_id, is_verified=True)
         
-        return Post.objects.prefetch_related("views").filter(book__book_id=book_id, is_verified=False)
+        elif filter == "un-verified":
+            return Post.objects.prefetch_related("views").filter(book__book_id=book_id, is_verified=False)
+        
+        return Post.objects.prefetch_related("views").filter(book__book_id=book_id)
     
 
 class VerifyBookPostsAPI(APIView):
