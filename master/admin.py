@@ -3,7 +3,6 @@ from master.models import *
 from account.models import CustomUser
 from PIL import Image
 from django.core.exceptions import ValidationError
-from master.forms import OnBoardingScreenAdminForm
 
 
 @admin.register(Post)

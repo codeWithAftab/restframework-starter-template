@@ -72,7 +72,7 @@ class PostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'source', "book_name", "book_cover",  'ar_content', "en_content", 'like_counts', 'comment_count',
-                  'is_audio_available', 'views_count', 'liked_by_current_user', 'liked_users', 'created_on', 'updated_on']
+                  'is_audio_available', 'views_count', 'liked_by_current_user', 'liked_users', 'is_verified', 'created_on', 'updated_on']
 
     def get_views_count(self, obj):
         count = obj.views.aggregate(Sum('count'))["count__sum"]
@@ -92,10 +92,12 @@ class PostsSerializer(serializers.ModelSerializer):
     
     def get_book_cover(self, obj):
         request = self.context.get('request')
-        image_url = obj.book.cover_image.url
-        if image_url:
-            return request.build_absolute_uri(image_url)
-        return None
+        if request:
+            image_url = obj.book.cover_image.url
+            if image_url:
+                return request.build_absolute_uri(image_url)
+            return None
+        return "pass request in context"
 
     def get_is_audio_available(self, obj):
         return False

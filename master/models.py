@@ -107,6 +107,7 @@ class Post(LikeableModel, models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     source = models.CharField(max_length=132, null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
     ar_content = models.TextField(null=True, blank=True)
     en_content = models.TextField(null=True, blank=True)
     embeddings = models.TextField(null=True)

@@ -16,7 +16,8 @@ urlpatterns = [
 ] 
 
 staff_urlpatterns = [
-    path("staff/posts/", staff_views.GetIslamicPosts.as_view(), name="get_posts"),
+    path("staff/posts/", staff_views.GetIslamicPostsAPI.as_view(), name="get_posts"),
+    path("staff/posts/verify-post/", staff_views.VerifyBookPostsAPI.as_view(), name="verify-post"),
 ] 
 
 urlpatterns += staff_urlpatterns

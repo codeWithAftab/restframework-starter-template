@@ -1,13 +1,13 @@
-from django import forms
-from PIL import Image
-from master.models import OnBoardingScreens
-from django.core.exceptions import ValidationError
-from io import BytesIO
+# from django import forms
+# from PIL import Image
+# from master.models import OnBoardingScreens
+# from django.core.exceptions import ValidationError
+# from io import BytesIO
 
-class OnBoardingScreenAdminForm(forms.ModelForm):
-    class Meta:
-        model = OnBoardingScreens
-        fields = '__all__'
+# class OnBoardingScreenAdminForm(forms.ModelForm):
+#     class Meta:
+#         model = OnBoardingScreens
+#         fields = '__all__'
 
     # def clean(self):
     #     cleaned_data = super().clean()

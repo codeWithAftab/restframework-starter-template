@@ -12,10 +12,33 @@ import random
 from datetime import timedelta
 
 
-class GetIslamicPosts(ListAPIView):
+class GetIslamicPostsAPI(ListAPIView):
     serializer_class = PostsSerializer
     # authentication_classes = [FirebaseStaffAuthentication] will add
 
     def get_queryset(self):
         book_id = self.request.GET["book_id"]
-        return Post.objects.prefetch_related("views").filter(book__book_id=book_id)
+        is_verified = self.request.GET.get('is_verified', None)
+        if is_verified == None:
+            return Post.objects.prefetch_related("views").filter(book__book_id=book_id)
+        
+        if is_verified:
+            return Post.objects.prefetch_related("views").filter(book__book_id=book_id, is_verified=True)
+        
+        return Post.objects.prefetch_related("views").filter(book__book_id=book_id, is_verified=False)
+    
+
+class VerifyBookPostsAPI(APIView):
+    def post(self, request):
+        try:
+            post_id = request.data["post_id"]
+            post = Post.objects.get(id=post_id)
+            post.is_verified = True
+            post.save()
+            return Response({"msg":"success", "data": PostsSerializer(post, context={"request":request}).data, })
+        
+        except KeyError as e:
+            return Response({"code": "missing_post_id", "msg": f"post_id is mandatory.{e}" }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        except Exception as e:
+            return Response({"code":"post_not_found", "msg": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
