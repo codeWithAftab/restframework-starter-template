@@ -3,6 +3,7 @@ master/migrations
 db.sqlite3
 static
 .env
+.venv/
 media
 mysite/__pycache__
 master/__pycache__
@@ -14,3 +15,6 @@ master/apis/sunnah/__pycache__
 account/__pycache__
 account/api/__pycache__
 firebase_auth/__pycache__
+*/__pycache__
+*/*/__pycache__
+.vscode/
